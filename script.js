@@ -113,3 +113,12 @@ function export_csv() {
     document.body.appendChild(link);
     link.click()
   }
+
+var hammertime = new Hammer(document.querySelector('html'))
+hammertime.on('swipeleft', function (ev) {
+    choose("a")
+})
+
+hammertime.on('swiperight', function (ev) {
+    choose("b")
+})

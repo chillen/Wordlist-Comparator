@@ -2,6 +2,7 @@
 <html>
   <head>
     <script src="https://cdn.jsdelivr.net/npm/csv-js@1.0.0/csv.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
     <script src="classes.js"></script>
     <script src="script.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
@@ -10,7 +11,7 @@
   <body>
       <div class="contain">
         <p>Read the below word, then look at the two wordlists presented.</p>
-        <p>Press the left or right arrow to select the list you like better.</p>
+        <p>Decide which list is <em>better.</em> Click the button, use the left or right arrow keys, or swipe to select a list.</p>
 
         <div id='grid'>
             <span id='seed-word'></span>
@@ -21,6 +22,6 @@
         </div>
 
         <button id="export" onclick='export_csv();return false;'>Click to Download Data</button>
-      </div>
+    </div>
   </body>
 </html>
