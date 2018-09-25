@@ -4,7 +4,10 @@ body {
     text-align: center;
     font-family: sans-serif;
     margin-top: 10%;
-    font-size: 1em;
+}
+
+body p {
+    font-size: 0.7em;
 }
 
 body > div {
@@ -78,3 +81,18 @@ button:hover {
 button#export {
     margin-top: 50px;
 }
+
+
+/* Mobile */
+@media only screen and (max-width: 480px) {
+
+    #grid {
+        display: grid;
+        grid-template-columns: auto auto auto; 
+        grid-template-rows: auto;
+        grid-template-areas:
+            ". seed. "
+            "a . b"
+            "abtn . bbtn";
+    }    
+  }
