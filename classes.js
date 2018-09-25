@@ -35,7 +35,6 @@ class Sheet {
             i = m
             batches.push({"params": params, "words": words})
         }
-        console.log(batches)
         return batches
     }
 

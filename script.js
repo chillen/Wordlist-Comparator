@@ -66,7 +66,6 @@ function setupListeners() {
 function buildWordlists(data, algorithm) {
     // Data is coming in with params and a 2D array of words
     // Wordlists are stored columnwise
-    console.log("building")
     for (let batch of data) {
         let params = batch["params"]
         let lists = batch["words"][0].map( (col, index) => batch["words"].map(row => row[index]))
