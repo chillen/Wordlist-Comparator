@@ -22,8 +22,8 @@ function choose(winner) {
 }
 
 function displayLists(a, b) {
-    document.querySelector("#wordlist-a").innerHTML = a.toHTML()
-    document.querySelector("#wordlist-b").innerHTML = b.toHTML()
+    document.querySelector("#wordlist-a").innerHTML = a.diffHTML(b)
+    document.querySelector("#wordlist-b").innerHTML = b.diffHTML(a)
 }
 
 function displaySeed(seed) {
@@ -46,8 +46,13 @@ function selectWordLists() {
     while (wl.length > 0 && b.seed != a.seed) {
         b = wl.shift()
     }
-    console.log(a, b)
-    return [a, b, a.seed]
+    
+    let seed = a.seed
+
+    if (a.diff(b).length == 0)
+        [a, b, seed] = selectWordLists()
+
+    return [a, b, seed]
 }
 
 function setupListeners() {

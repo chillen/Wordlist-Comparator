@@ -62,12 +62,18 @@ class Wordlist {
         let compare = other.nearest
         return this.nearest.filter(function(i) {return compare.indexOf(i) < 0;});
     }
-    toHTML() {
+    HTML(list) {
         let out = ''
-        for (let word of this.nearest) {
+        for (let word of list) {
             out += `<li>${word}</li>`
         }
-        return out
+        return out 
+    }
+    toHTML() {
+        return this.HTML(this.nearest)
+    }
+    diffHTML(other) {
+        return this.HTML(this.diff(other))
     }
 }
 
