@@ -4,11 +4,12 @@ var currentTrial = null
 
 document.addEventListener('DOMContentLoaded', function () {
     setupListeners()
-    populateWordlists()
-    let [a, b, seed] = selectWordLists()
-    currentTrial = new Trial(a, b)
-    displaySeed(seed)
-    displayLists(a, b)
+    populateWordlists().then(wordlists => {
+        let [a, b, seed] = selectWordLists()
+        currentTrial = new Trial(a, b)
+        displaySeed(seed)
+        displayLists(a, b)
+    }).catch(err => console.log(err))
 })
 
 function choose(winner) {
@@ -45,7 +46,7 @@ function selectWordLists() {
     while (wl.length > 0 && b.seed != a.seed) {
         b = wl.shift()
     }
-     
+    console.log(a, b)
     return [a, b, a.seed]
 }
 
@@ -62,55 +63,33 @@ function setupListeners() {
       })
 }
 
+function buildWordlists(data, algorithm) {
+    // Data is coming in with params and a 2D array of words
+    // Wordlists are stored columnwise
+    console.log("building")
+    for (let batch of data) {
+        let params = batch["params"]
+        let lists = batch["words"][0].map( (col, index) => batch["words"].map(row => row[index]))
+        
+        for (let list of lists) {
+            let seed = list.shift()
+            wordlists.push(new Wordlist(algorithm, params, seed, list))
+        }
+    }
+    return wordlists
+}
+var d = {}
 function populateWordlists() {
-    // Stub data for now
-    let a = "Vectorized Collocations"
-    let p = "n: 10,min: 0,max: 101,thresh: 0,emo: none,components: keep,trim: -1"
-    let w = "flower"
-    let wl = "leaf,shade,sunny,sunshine,bright,bloom,weed,delicious,shady,green".split(",")
-    wordlists.push(new Wordlist(a, p, w, wl))
-
-    a = "Not Collocations"
-    p = "n: 10,min: 0,max: 101,thresh: 0,emo: none,components: keep,trim: -1"
-    w = "flower"
-    wl = "leaf,shade,sunny,sunshine,bright,bloom,weed,delicious,shady,green".split(",")
-    wordlists.push(new Wordlist(a, p, w, wl))
-
-    a = "Vectorized Collocations"
-    p = "n: 10,min: 9,max: 101,thresh: 0,emo: none,components: keep,trim: -1"
-    w = "flower"
-    wl = "leaf,shade,sunny,sunshine,bright,bloom,weed,delicious,shady,green".split(",")
-    wordlists.push(new Wordlist(a, p, w, wl))
-
-    a = "Vectorized Collocations"
-    p = "n: 10,min: 9,max: 101,thresh: 0,emo: none,components: keep,trim: -1"
-    w = "flower"
-    wl = "leaf,shade,sunny,sunshine,bright,bloom,weed,delicious,shady,green".split(",")
-    wordlists.push(new Wordlist(a, p, w, wl))
-
-    a = "Vectorized Collocations"
-    p = "n: 10,min: 0,max: 101,thresh: 0,emo: none,components: keep,trim: -1"
-    w = "rat"
-    wl = "leaf,shade,sunny,sunshine,bright,bloom,weed,delicious,shady,green".split(",")
-    wordlists.push(new Wordlist(a, p, w, wl))
-
-    a = "Not Collocations"
-    p = "n: 10,min: 0,max: 101,thresh: 0,emo: none,components: keep,trim: -1"
-    w = "rat"
-    wl = "leaf,shade,sunny,sunshine,bright,bloom,weed,delicious,shady,green".split(",")
-    wordlists.push(new Wordlist(a, p, w, wl))
-
-    a = "Vectorized Collocations"
-    p = "n: 10,min: 9,max: 101,thresh: 0,emo: none,components: keep,trim: -1"
-    w = "rat"
-    wl = "leaf,shade,sunny,sunshine,bright,bloom,weed,delicious,shady,green".split(",")
-    wordlists.push(new Wordlist(a, p, w, wl))
-
-    a = "Vectorized Collocations"
-    p = "n: 10,min: 9,max: 101,thresh: 0,emo: none,components: keep,trim: -1"
-    w = "rat"
-    wl = "leaf,shade,sunny,sunshine,bright,bloom,weed,delicious,shady,green".split(",")
-    wordlists.push(new Wordlist(a, p, w, wl))
+    let sheets = [
+        new Sheet("11sz6r_DTmFgsvBre17OvQ1Onm_Mth10N4VaoeF-3GKU", "97436287"),
+        new Sheet("11sz6r_DTmFgsvBre17OvQ1Onm_Mth10N4VaoeF-3GKU", "1513377307"),
+        new Sheet("11sz6r_DTmFgsvBre17OvQ1Onm_Mth10N4VaoeF-3GKU", "1297878941")]
+        
+    return Promise.all([
+        sheets[0].setupData().then(data => buildWordlists(data, "Vectorized Collocations")),
+        sheets[1].setupData().then(data => buildWordlists(data, "TF-IDF Weighting")),
+        sheets[2].setupData().then(data => buildWordlists(data, "LLR"))
+    ])
 }
 
 

@@ -1,15 +1,56 @@
-// I really wish import was universal alread
-// class Sheet {
-//     // Quick sheet class to pull google spreadsheets
-//     constructor(id, name) {
-//         this.id = id
-//         this.name = name
-//     }
+class Sheet {
+    constructor(sheet, gid) {
+        this.sheet = sheet
+        this.gid = gid
+        this.data = {}
+    }
 
-//     fetch() {
-        
-//     }
-// }
+    parseResponse(res) {
+        // This is a very magic, specifically implemented parser
+        // for the format my data sheets are in. Will need adjustment
+        // with new formats
+
+        // Use a lovely lighteweight CSV library from gkindel
+        this.data = CSV.parse(res)
+        // Currently, the first column is copy paste garbage. 
+        this.data = this.data.map(val => val.slice(1))
+        // Each batch is a header of params, a header of words, and a row for each word
+        // This means a batch of words is 12 rows total
+        let batches = []
+        let i = 0
+        while (i < this.data.length) {
+            let params = this.data[i]
+            let m = i
+            let cell = ""
+            let words = []
+
+            while (!cell.includes("n:")) {
+                m += 1
+                if (m == this.data.length)
+                    break
+                
+                cell = this.data[m][0]
+            }
+            words = this.data.slice(i+1, m)
+            i = m
+            batches.push({"params": params, "words": words})
+        }
+        console.log(batches)
+        return batches
+    }
+
+    setupData() {
+        return this.getData().then(response => response.text())
+                      .then(response => this.parseResponse(response))
+                      .catch(err => console.error(err))
+    }
+
+    getData() {
+        let url = `https://docs.google.com/spreadsheets/d/${this.sheet}/gviz/tq?gid=${this.gid}&tqx=out:csv`
+        let request = new Request(url)
+        return fetch(request);
+    }
+}
 
 class Wordlist {
     constructor(algorithm, params, seed, nearest) {
