@@ -114,7 +114,9 @@ function export_csv() {
     link.click()
   }
 
-var hammertime = new Hammer(document.querySelector('html'))
+var hammertime = new Hammer(document.querySelector('html'), {
+    inputClass: Hammer.TouchInput
+})
 hammertime.on('swipeleft', function (ev) {
     choose("a")
 })
