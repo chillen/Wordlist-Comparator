@@ -1,0 +1,80 @@
+body {
+    background: black;
+    color: #bbb;
+    text-align: center;
+    font-family: sans-serif;
+    margin-top: 10%;
+    font-size: 1em;
+}
+
+body > div {
+    width: 100%;
+    text-align: center;
+}
+
+#grid {
+    display: grid;
+    grid-template-columns: 30% auto 10% auto 30%; 
+    grid-template-rows: auto;
+    grid-template-areas:
+        ". . seed . ."
+        ". a . b ."
+        ". abtn . bbtn .";
+}
+
+#grid ul {
+    list-style: none;
+    padding: 0;
+}
+
+#grid #seed-word {
+    grid-area: seed;
+    font-size: 32px;
+    text-align: center;
+    margin: 0;
+}
+
+#grid #wordlist-a {
+    grid-area: a;
+    text-align: right;
+}
+
+#grid #wordlist-b {
+    grid-area: b;
+    text-align: left;
+}
+
+#grid button {
+    padding: 5px 5px;
+}
+
+#grid #a-btn {
+    grid-area: abtn;
+    border-color:#c897cc;
+}
+
+#grid #b-btn {
+    grid-area: bbtn;
+    border-color:#63b4b4;
+}
+
+button {
+    background-color: rgba(0,0,0,0); /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border: 2px solid #4CAF50;
+    transition: border 1s cubic-bezier(0.4, 0, 1, 1);
+}
+
+button:hover {
+    border: 2px solid #2b5d2d;
+}
+
+button#export {
+    margin-top: 50px;
+}

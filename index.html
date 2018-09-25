@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="classes.js"></script>
+    <script src="script.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+      <div class="contain">
+        <p>Read the below word, then look at the two wordlists presented.</p>
+        <p>Press the left or right arrow to select the list you like better.</p>
+
+        <div id='grid'>
+            <span id='seed-word'></span>
+            <ul id='wordlist-a'></ul>
+            <ul id='wordlist-b'></ul>
+            <button id="a-btn" onclick='choose("a");return false;'>Left is Better</button>
+            <button id="b-btn" onclick='choose("b");return false;'>Right is Better</button>
+        </div>
+
+        <button id="export" onclick='export_csv();return false;'>Click to Download Data</button>
+      </div>
+  </body>
+</html>
