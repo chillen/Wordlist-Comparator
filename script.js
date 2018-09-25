@@ -99,19 +99,17 @@ function populateWordlists() {
 
 function export_csv() {
     // TODO - based on previous tester
-    // let rows = []
-    // rows.push('data:text/csv;charset=utf-8,Word,Interesting,POS')
-    // for (let word of good) {
-    //   rows.push(word + ',' + '1,'+data[word])
-    // }
-    // for (let word of bad) {
-    //   rows.push(word + ',' + '0,'+data[word])
-    // }
-    // let csv = rows.join("\n")
-    // var encodedUri = encodeURI(csv);
-    // var link = document.createElement("a");
-    // link.setAttribute("href", encodedUri);
-    // link.setAttribute("download", "list_comparison_data.csv");
-    // document.body.appendChild(link);
-    // link.click()
+    let rows = []
+    rows.push('data:text/csv;charset=utf-8,Won,Algorithm,min,max,thresh,emo,components,trim,Diff Words...')
+    for (let trial of trials) {
+        rows.push(`${trial.winner == 'a'},${trial.a.algorithm},${trial.a.params},${trial.a.diff(trial.b)}`)
+        rows.push(`${trial.winner == 'b'},${trial.b.algorithm},${trial.b.params},${trial.b.diff(trial.a)}`)
+    }
+    let csv = rows.join("\n")
+    var encodedUri = encodeURI(csv);
+    var link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "list_comparison_data.csv");
+    document.body.appendChild(link);
+    link.click()
   }

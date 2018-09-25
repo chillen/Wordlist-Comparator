@@ -20,6 +20,8 @@ class Sheet {
         let i = 0
         while (i < this.data.length) {
             let params = this.data[i]
+            params = params.slice(1, 7)
+            params = params.map(val => val.split(": ")[1])
             let m = i
             let cell = ""
             let words = []
@@ -33,6 +35,7 @@ class Sheet {
             }
             words = this.data.slice(i+1, m)
             i = m
+
             batches.push({"params": params, "words": words})
         }
         return batches
