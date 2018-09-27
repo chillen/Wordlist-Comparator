@@ -1,6 +1,7 @@
 var trials = []
 var wordlists = []
 var currentTrial = null
+var session = Math.random().toString(36).substring(7) // Random enough session key
 
 document.addEventListener('DOMContentLoaded', function () {
     setupListeners()
@@ -96,22 +97,44 @@ function populateWordlists() {
     ])
 }
 
-
-function export_csv() {
-    // TODO - based on previous tester
+function data_to_csv_string(meta=true) {
     let rows = []
-    rows.push('data:text/csv;charset=utf-8,Won,Algorithm,min,max,thresh,emo,components,trim,Diff Words...')
+    let meta_text = meta?"data:text/csv;charset=utf-8":""
+    rows.push(`${meta_text}Won,Algorithm,min,max,thresh,emo,components,trim,Diff Words...`)
     for (let trial of trials) {
         rows.push(`${trial.winner == 'a'},${trial.a.algorithm},${trial.a.params},${trial.a.diff(trial.b)}`)
         rows.push(`${trial.winner == 'b'},${trial.b.algorithm},${trial.b.params},${trial.b.diff(trial.a)}`)
     }
     let csv = rows.join("\n")
+    return csv
+}
+
+function submit_data() {
+    let scriptURL = "https://script.google.com/macros/s/AKfycbxgBa0l3eUOTrE4-k6t3sRoA_wmjjOZcczDMuxd38KPOohJues/exec"
+    let data = new FormData()
+
+    data.append("session", session)
+    data.append("data", data_to_csv_string(meta=false))
+    fetch(scriptURL, { method: 'POST', body: data})
+      .then(response => {
+          swal("Sent Data", "Successfully sent out and cleared your data. Thanks for your help!", "success")
+          trials = []
+        })
+      .catch(error => {
+        swal("Uh oh!", "Something went wrong sending the data. You can try again or download the data as a CSV.", "error")
+      })
+}
+
+function export_csv() {
+    // TODO - based on previous tester
+    let csv = data_to_csv_string()
     var encodedUri = encodeURI(csv);
     var link = document.createElement("a");
     link.setAttribute("href", encodedUri);
     link.setAttribute("download", "list_comparison_data.csv");
     document.body.appendChild(link);
     link.click()
+    trials = []
   }
 
 var hammertime = new Hammer(document.querySelector('html'), {

@@ -72,14 +72,16 @@ button {
     font-size: 16px;
     border: 2px solid #4CAF50;
     transition: border 1s cubic-bezier(0.4, 0, 1, 1);
+    min-width: 250px;
 }
 
 button:hover {
     border: 2px solid #2b5d2d;
 }
 
-button#export {
+button#submit {
     margin-top: 50px;
+    margin-bottom: 10px;
 }
 
 
