@@ -22,6 +22,7 @@ class Sheet {
             let params = this.data[i]
             params = params.slice(1, 7)
             params = params.map(val => val.split(": ")[1])
+            params = params.join(":")
             let m = i
             let cell = ""
             let words = []

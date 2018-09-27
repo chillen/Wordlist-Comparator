@@ -86,9 +86,9 @@ function buildWordlists(data, algorithm) {
 var d = {}
 function populateWordlists() {
     let sheets = [
-        new Sheet("11sz6r_DTmFgsvBre17OvQ1Onm_Mth10N4VaoeF-3GKU", "97436287"),
-        new Sheet("11sz6r_DTmFgsvBre17OvQ1Onm_Mth10N4VaoeF-3GKU", "1513377307"),
-        new Sheet("11sz6r_DTmFgsvBre17OvQ1Onm_Mth10N4VaoeF-3GKU", "1297878941")]
+        new Sheet("146dM4fORoxKjB5R8CLTfSaNGw37UehCd0ILB_04tJ6U", "920849493"),
+        new Sheet("1JqMiPB0PGTGq0i_xxraZtzd2WuJPDlPRQZF7KNrbMFA", "1447064900"),
+        new Sheet("14tHZ9VCGSUtT-mIMUUoVS_WclZRbYnQdNfDofbMKVeo", "6964893")]
         
     return Promise.all([
         sheets[0].setupData().then(data => buildWordlists(data, "Vectorized Collocations")),
@@ -97,10 +97,11 @@ function populateWordlists() {
     ])
 }
 
-function data_to_csv_string(meta=true) {
+function data_to_csv_string(meta=true, header=true) {
     let rows = []
     let meta_text = meta?"data:text/csv;charset=utf-8":""
-    rows.push(`${meta_text}Won,Algorithm,min,max,thresh,emo,components,trim,Diff Words...`)
+    if (header)
+        rows.push(`${meta_text}Won,Algorithm,min:max:thresh:emo:components:trim,Diffs`)
     for (let trial of trials) {
         rows.push(`${trial.winner == 'a'},${trial.a.algorithm},${trial.a.params},${trial.a.diff(trial.b)}`)
         rows.push(`${trial.winner == 'b'},${trial.b.algorithm},${trial.b.params},${trial.b.diff(trial.a)}`)
@@ -114,15 +115,16 @@ function submit_data() {
     let data = new FormData()
 
     data.append("session", session)
-    data.append("data", data_to_csv_string(meta=false))
-    fetch(scriptURL, { method: 'POST', body: data})
+    data.append("data", data_to_csv_string(meta=false, header=false))
+    fetch(scriptURL, { method: 'POST', mode: 'cors', body: data})
       .then(response => {
           swal("Sent Data", "Successfully sent out and cleared your data. Thanks for your help!", "success")
           trials = []
         })
       .catch(error => {
         swal("Uh oh!", "Something went wrong sending the data. You can try again or download the data as a CSV.", "error")
-      })
+        console.log(error)
+    })
 }
 
 function export_csv() {
