@@ -49,6 +49,7 @@ body > div {
 
 #grid button {
     padding: 5px 5px;
+    min-width: 0px;
 }
 
 #grid #a-btn {
