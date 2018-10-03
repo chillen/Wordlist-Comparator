@@ -101,10 +101,10 @@ function data_to_csv_string(meta=true, header=true) {
     let rows = []
     let meta_text = meta?"data:text/csv;charset=utf-8":""
     if (header)
-        rows.push(`${meta_text}Won,Algorithm,min:max:thresh:emo:components:trim,Diffs`)
+        rows.push(`${meta_text}Won,Algorithm,min:max:thresh:emo:components:trim,Seed,Diffs`)
     for (let trial of trials) {
-        rows.push(`${trial.winner == 'a'},${trial.a.algorithm},${trial.a.params},${trial.a.diff(trial.b)}`)
-        rows.push(`${trial.winner == 'b'},${trial.b.algorithm},${trial.b.params},${trial.b.diff(trial.a)}`)
+        rows.push(`${trial.winner == 'a'},${trial.a.algorithm},${trial.a.params},${trial.a.seed},${trial.a.diff(trial.b)}`)
+        rows.push(`${trial.winner == 'b'},${trial.b.algorithm},${trial.b.params},${trial.a.seed},${trial.b.diff(trial.a)}`)
     }
     let csv = rows.join("\n")
     return csv
